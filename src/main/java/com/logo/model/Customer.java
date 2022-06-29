@@ -1,23 +1,30 @@
 package com.logo.model;
 
+import org.hibernate.annotations.JoinColumnOrFormula;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 //Models a Customer/Supplier in isbasi app.
 //İşbaşı uygulamasındaki Müşteri/Tedarikçi kısımlarını modeller.
-public class Customer {
+@Entity
+ public  class Customer {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
+    @Column
     private String name;
+    @Column
     private int age;
+    @Column
     private boolean isActive;
+    @Transient
     private List<SalesInvoice> invoiceList = new ArrayList<>();
 
-    public Customer(String name, int age, List<SalesInvoice> orderList) {
-        super();
-        this.name = name;
-        this.age = age;
-        this.invoiceList = orderList;
+    public Customer() {
+
     }
 
     public String getName() {

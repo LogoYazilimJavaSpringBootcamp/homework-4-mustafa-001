@@ -50,7 +50,7 @@ public class CustomerService {
 //		orderService.createOrder();
 
 //		return prepareCustomerList();
-        return customerRepository.getAll();
+        return customerRepository.findAll();
     }
 
     public Optional<Customer> getCustomerByName(String name) {
