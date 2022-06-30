@@ -1,30 +1,12 @@
 package com.logo.repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.logo.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.logo.model.Customer;
-import com.logo.model.User;
+import java.util.Optional;
 
 @Repository
-public class UserRepository {
-
-	private static List<User> userList = new ArrayList<>();
-
-	public User save(User request) {
-		userList.add(request);
-		return request;
-	}
-
-	public List<User> findAll() {
-		return userList;
-	}
-
-	public Optional<User> findByEmail(String email) {
-		return userList.stream().filter(user -> user.getEmail().equals(email)).findFirst();
-	}
-
+public interface UserRepository extends JpaRepository<User, Long> {
+	Optional<User> findByEmail(String email);
 }

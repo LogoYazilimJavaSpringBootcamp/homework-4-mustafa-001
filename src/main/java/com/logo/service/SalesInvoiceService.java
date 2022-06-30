@@ -2,14 +2,15 @@ package com.logo.service;
 
 import com.logo.model.ProductOrServiceAmountPair;
 import com.logo.model.SalesInvoice;
+import com.logo.repository.ProductOrServiceAmountPairRepository;
 import com.logo.repository.ProductRepository;
 import com.logo.repository.SalesInvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class SalesInvoiceService {
@@ -17,16 +18,22 @@ public class SalesInvoiceService {
     private SalesInvoiceRepository salesInvoiceRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private ProductOrServiceAmountPairRepository productOrServiceAmountPairRepository;
 
     public SalesInvoice create(SalesInvoice request) {
-        request.setProducts(request.getProducts().stream()
-                .map(it -> new ProductOrServiceAmountPair(productRepository.findById(it.product().getId()).get(), it.amount()))
-                .toList());
+        List<ProductOrServiceAmountPair> list = new ArrayList<>();
+        for (ProductOrServiceAmountPair it : request.getProducts()) {
+            ProductOrServiceAmountPair pair = new ProductOrServiceAmountPair(productRepository.findById(it.getProduct().getId()).get(), it.getAmount());
+            productOrServiceAmountPairRepository.save(pair);
+            list.add(pair);
+        }
+        request.setProducts(list);
         return salesInvoiceRepository.save(request);
     }
 
     public List<SalesInvoice> getAllTransactions() {
-        return salesInvoiceRepository.getAll();
+        return salesInvoiceRepository.findAll();
     }
 
     public Optional<SalesInvoice> getSalesInvoiceByDocumentNumber(String documentNumber) {
@@ -43,12 +50,18 @@ public class SalesInvoiceService {
         if (oldInvoiceOpt.isEmpty()) {
             throw new IllegalArgumentException();
         }
-
-        salesInvoice.setProducts(salesInvoice.getProducts().stream()
-                .map(it -> new ProductOrServiceAmountPair(productRepository.findById(it.product().getId()).get(), it.amount()))
-                .toList());
-
         var oldInvoice = oldInvoiceOpt.get();
+
+        if (!salesInvoice.getProducts().isEmpty()) {
+            List<ProductOrServiceAmountPair> list = new ArrayList<>();
+            for (ProductOrServiceAmountPair it : salesInvoice.getProducts()) {
+                ProductOrServiceAmountPair pair = new ProductOrServiceAmountPair(productRepository.findById(it.getProduct().getId()).get(), it.getAmount());
+                productOrServiceAmountPairRepository.save(pair);
+                list.add(pair);
+            }
+            productOrServiceAmountPairRepository.deleteAll(oldInvoice.getProducts());
+            oldInvoice.setProducts(list);
+        }
         if (salesInvoice.getDocumentNumber() != null) oldInvoice.setDocumentNumber(salesInvoice.getDocumentNumber());
         if (salesInvoice.getInvoiceDate() != null) oldInvoice.setInvoiceDate(salesInvoice.getInvoiceDate());
         if (salesInvoice.getAddress() != null) oldInvoice.setAddress(salesInvoice.getAddress());

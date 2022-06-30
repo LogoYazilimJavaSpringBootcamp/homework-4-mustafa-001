@@ -2,18 +2,24 @@ package com.logo.model;
 
 import com.logo.model.enums.StockTransactionType;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 //Models a warehouse transaction in isbasi app.
 //İşbaşı uygulamasınının Stok ve Hizmet kısmındaki Stok Hareketleri kısmını modeller.
+@Entity
 public class StockTransaction {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String documentNumber;
+    @Enumerated(EnumType.STRING)
     private StockTransactionType type;
     private LocalDate date;
     private String description;
+    @OneToMany
     private List<ProductOrServiceAmountPair> products = new ArrayList<>();
 
     public List<ProductOrServiceAmountPair> getProducts() {

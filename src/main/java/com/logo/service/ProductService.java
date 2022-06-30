@@ -18,7 +18,7 @@ public class ProductService {
     }
 
     public List<Product> getAllProducts() {
-        return productRepository.getAll();
+        return productRepository.findAll();
     }
 
     public Optional<Product> getProductByBarcode(String code) {

@@ -2,11 +2,13 @@ package com.logo.service;
 
 import com.logo.model.ProductOrServiceAmountPair;
 import com.logo.model.StockTransaction;
+import com.logo.repository.ProductOrServiceAmountPairRepository;
 import com.logo.repository.ProductRepository;
 import com.logo.repository.StockTransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,16 +19,22 @@ public class StockTransactionService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private ProductOrServiceAmountPairRepository productOrServiceAmountPairRepository;
 
     public StockTransaction create(StockTransaction request) {
-        request.setProducts(request.getProducts().stream()
-                .map(it -> new ProductOrServiceAmountPair(productRepository.findById(it.product().getId()).get(), it.amount()))
-                .toList());
+        List<ProductOrServiceAmountPair> list = new ArrayList<>();
+        for (ProductOrServiceAmountPair it : request.getProducts()) {
+            ProductOrServiceAmountPair pair = new ProductOrServiceAmountPair(productRepository.findById(it.getProduct().getId()).get(), it.getAmount());
+            productOrServiceAmountPairRepository.save(pair);
+            list.add(pair);
+        }
+        request.setProducts(list);
         return stockTransactionRepository.save(request);
     }
 
     public List<StockTransaction> getAllTransactions() {
-        return stockTransactionRepository.getAll();
+        return stockTransactionRepository.findAll();
     }
 
     public Optional<StockTransaction> getStockTransactionByDocumentNumber(String documentNumber) {
@@ -43,12 +51,17 @@ public class StockTransactionService {
         if (oldTransactionOpt.isEmpty()) {
             throw new IllegalArgumentException();
         }
-
-        transaction.setProducts(transaction.getProducts().stream()
-                .map(it -> new ProductOrServiceAmountPair(productRepository.findById(it.product().getId()).get(), it.amount()))
-                .toList());
-
         var oldTransaction = oldTransactionOpt.get();
+        if (!transaction.getProducts().isEmpty()) {
+            List<ProductOrServiceAmountPair> list = new ArrayList<>();
+            for (ProductOrServiceAmountPair it : transaction.getProducts()) {
+                ProductOrServiceAmountPair pair = new ProductOrServiceAmountPair(productRepository.findById(it.getProduct().getId()).get(), it.getAmount());
+                productOrServiceAmountPairRepository.save(pair);
+                list.add(pair);
+            }
+            productOrServiceAmountPairRepository.deleteAll(oldTransaction.getProducts());
+            oldTransaction.setProducts(list);
+        }
         if (transaction.getDate() != null) oldTransaction.setDate(transaction.getDate());
         if (transaction.getDocumentNumber() != null) oldTransaction.setDocumentNumber(transaction.getDocumentNumber());
         if (transaction.getDescription() != null) oldTransaction.setDescription(transaction.getDescription());

@@ -1,10 +1,9 @@
 package com.logo.model;
 
-import org.hibernate.annotations.JoinColumnOrFormula;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 //Models a Customer/Supplier in isbasi app.
 //İşbaşı uygulamasındaki Müşteri/Tedarikçi kısımlarını modeller.
@@ -12,16 +11,24 @@ import java.util.List;
  public  class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Column
     private String name;
-    @Column
     private int age;
-    @Column
+    @OneToOne
+    private Address address;
     private boolean isActive;
-    @Transient
+
+    @OneToMany
     private List<SalesInvoice> invoiceList = new ArrayList<>();
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     public Customer() {
 
@@ -43,9 +50,6 @@ import java.util.List;
         this.age = age;
     }
 
-    public List<SalesInvoice> getInvoiceList() {
-        return invoiceList;
-    }
 
     public void setInvoiceList(List<SalesInvoice> invoiceList) {
         this.invoiceList = invoiceList;
@@ -65,5 +69,9 @@ import java.util.List;
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public List<SalesInvoice> getInvoiceList() {
+        return invoiceList;
     }
 }

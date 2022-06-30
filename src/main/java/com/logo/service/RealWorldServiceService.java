@@ -18,11 +18,11 @@ public class RealWorldServiceService {
     }
 
     public List<RealWorldService> getAllServices(){
-        return serviceRepository.getAll();
+        return serviceRepository.findAll();
     }
 
     public Optional<RealWorldService> getServiceByCode(String code){
-        return  serviceRepository.findByCode(code);
+        return  serviceRepository.findByServiceCode(code);
     }
 
     public List<RealWorldService> getServicesStartingWith(String searchQuery){

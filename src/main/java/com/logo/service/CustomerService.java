@@ -2,6 +2,7 @@ package com.logo.service;
 
 import com.logo.model.Customer;
 import com.logo.model.SalesInvoice;
+import com.logo.repository.AddressRepository;
 import com.logo.repository.CustomerRepository;
 import com.logo.repository.SalesInvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
     @Autowired
+    private AddressRepository addressRepository;
+    @Autowired
     private SalesInvoiceRepository salesInvoiceRepository;
 
 
@@ -36,7 +39,8 @@ public class CustomerService {
 
     public Customer create(Customer request) {
         System.out.println("Adding customer:" + request.toString());
-        request.setInvoiceList(salesInvoiceRepository.fetchInvoicesFromIds(request.getInvoiceList()));
+        addressRepository.save(request.getAddress());
+        request.setInvoiceList(salesInvoiceRepository.findAllById(request.getInvoiceList().stream().map(SalesInvoice::getId).toList()));
         return customerRepository.save(request);
     }
 
@@ -67,13 +71,14 @@ public class CustomerService {
 
     public Customer update(int id, Customer customer) {
         System.out.println("Updating customer: " + id + "  to " + customer.toString());
-        customer.setInvoiceList(salesInvoiceRepository.fetchInvoicesFromIds(customer.getInvoiceList()));
+        addressRepository.update(customer.getAddress());
+        customer.setInvoiceList(salesInvoiceRepository.findAllById(customer.getInvoiceList().stream().map(SalesInvoice::getId).toList()));
         var oldCustomerOpt = customerRepository.findById(id);
         if (oldCustomerOpt.isEmpty()) {
             throw new IllegalArgumentException();
         }
 
-        customer.setInvoiceList(salesInvoiceRepository.fetchInvoicesFromIds(customer.getInvoiceList()));
+        customer.setInvoiceList(salesInvoiceRepository.findAllById(customer.getInvoiceList().stream().map(SalesInvoice::getId).toList()));
 
         var oldCustomer = oldCustomerOpt.get();
         if (customer.getName() != null) oldCustomer.setName(customer.getName());
