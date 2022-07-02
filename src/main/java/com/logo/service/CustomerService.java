@@ -5,6 +5,9 @@ import com.logo.model.SalesInvoice;
 import com.logo.repository.AddressRepository;
 import com.logo.repository.CustomerRepository;
 import com.logo.repository.SalesInvoiceRepository;
+import com.logo.repository.customerdao.CustomerDao;
+import com.logo.repository.customerdao.HibernateCustomerDao;
+import com.logo.repository.customerdao.JDBCTemplateCustomerDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +27,22 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
     @Autowired
+    private HibernateCustomerDao hibernateCustomerDao;
+
+    @Autowired
     private AddressRepository addressRepository;
     @Autowired
     private SalesInvoiceRepository salesInvoiceRepository;
 
+    private CustomerDao getCurrentCustomerDao(){
+        if (true) {
+            System.out.println("Using HibernateCustomerDao.");
+            return hibernateCustomerDao;
+        } else if (false){
+            System.out.println("Using JDBCTemplateCustomerDao.");
+        }
+        return null;
+    }
 
     public CustomerService(OrderService orderService) {
         this.orderService = orderService;
@@ -41,7 +56,7 @@ public class CustomerService {
         System.out.println("Adding customer:" + request.toString());
         addressRepository.save(request.getAddress());
         request.setInvoiceList(salesInvoiceRepository.findAllById(request.getInvoiceList().stream().map(SalesInvoice::getId).toList()));
-        return customerRepository.save(request);
+        return getCurrentCustomerDao().save(request);
     }
 
     public List<Customer> getAllCustomers() {
@@ -65,11 +80,11 @@ public class CustomerService {
         return customerRepository.getByIsActive(activeStatus);
     }
 
-    public Optional<Customer> getCustomerById(int id) {
+    public Optional<Customer> getCustomerById(long id) {
         return customerRepository.findById(id);
     }
 
-    public Customer update(int id, Customer customer) {
+    public Customer update(long id, Customer customer) {
         System.out.println("Updating customer: " + id + "  to " + customer.toString());
         addressRepository.update(customer.getAddress());
         customer.setInvoiceList(salesInvoiceRepository.findAllById(customer.getInvoiceList().stream().map(SalesInvoice::getId).toList()));
@@ -88,7 +103,7 @@ public class CustomerService {
         return oldCustomer;
     }
 
-    public void delete(int id) {
+    public void delete(long id) {
         System.out.println("Deleting customer: " + id);
         var customerOpt = customerRepository.findById(id);
         if (customerOpt.isEmpty()) {

@@ -13,7 +13,7 @@ import java.util.List;
 public class StockTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
     private String documentNumber;
     @Enumerated(EnumType.STRING)
     private StockTransactionType type;
@@ -30,12 +30,11 @@ public class StockTransaction {
         this.products = products;
     }
 
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

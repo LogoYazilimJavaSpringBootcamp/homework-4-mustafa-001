@@ -17,7 +17,6 @@ import java.util.*;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@NoArgsConstructor
 @Table
 @Entity
 public class SalesInvoice {

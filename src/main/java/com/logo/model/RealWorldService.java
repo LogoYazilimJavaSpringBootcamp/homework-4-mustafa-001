@@ -21,7 +21,7 @@ public class RealWorldService extends ProductOrService {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         RealWorldService that = (RealWorldService) o;
-        return id != null && Objects.equals(id, that.id);
+        return id == that.id;
     }
 
     @Override

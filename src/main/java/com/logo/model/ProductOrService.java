@@ -20,7 +20,7 @@ import java.util.Currency;
 abstract class ProductOrService {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long id;
+    protected long id;
     protected String name;
      UnitType unitType;
     //KDV(Katma Değer Vergisi)/VAT(Value Added Tax)
