@@ -28,6 +28,8 @@ public class CustomerService {
 
     @Autowired
     private HibernateCustomerDao hibernateCustomerDao;
+    @Autowired
+    private JDBCTemplateCustomerDao jdbcTemplateCustomerDao;
 
     @Autowired
     private AddressRepository addressRepository;
@@ -35,11 +37,12 @@ public class CustomerService {
     private SalesInvoiceRepository salesInvoiceRepository;
 
     private CustomerDao getCurrentCustomerDao(){
-        if (true) {
+        if (false) {
             System.out.println("Using HibernateCustomerDao.");
             return hibernateCustomerDao;
-        } else if (false){
+        } else if (true){
             System.out.println("Using JDBCTemplateCustomerDao.");
+            return jdbcTemplateCustomerDao;
         }
         return null;
     }
