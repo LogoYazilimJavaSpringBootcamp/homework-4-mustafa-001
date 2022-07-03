@@ -27,6 +27,8 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
+    private JdbcCustomerDao jdbcCustomerDao;
+    @Autowired
     private JDBCTemplateCustomerDao jdbcTemplateCustomerDao;
     @Autowired
     private HibernateCustomerDao hibernateCustomerDao;
@@ -36,15 +38,17 @@ public class CustomerService {
     @Autowired
     private SalesInvoiceRepository salesInvoiceRepository;
 
-    private CustomerDao getCurrentCustomerDao(){
+    private CustomerDao getCurrentCustomerDao() {
         if (false) {
             System.out.println("Using HibernateCustomerDao.");
             return hibernateCustomerDao;
-        } else if (true){
+        } else if (false) {
             System.out.println("Using JDBCTemplateCustomerDao.");
             return jdbcTemplateCustomerDao;
+        } else {
+            System.out.println("Using JdbcCustomerDao.");
+            return jdbcCustomerDao;
         }
-        return null;
     }
 
     public CustomerService(OrderService orderService) {
@@ -57,7 +61,8 @@ public class CustomerService {
 
     public Customer create(Customer request) {
         System.out.println("Adding customer:" + request.toString());
-        addressRepository.save(request.getAddress());
+        var address = addressRepository.save(request.getAddress());
+        request.setAddress(address);
         request.setInvoiceList(salesInvoiceRepository.findAllById(request.getInvoiceList().stream().map(SalesInvoice::getId).toList()));
         return getCurrentCustomerDao().save(request);
     }
