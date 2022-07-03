@@ -1,44 +1,55 @@
 package com.isbasi.dto;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "emails")
 public class EmailDto {
+    @Id
+    private String email;
+    private String name;
+    private String title;
+    private String text;
 
-	private String to;
-	private String title;
-	private String email;
+    public EmailDto() {
+    }
 
-	public EmailDto() {
+    public String getEmail() {
+        return email;
+    }
 
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public EmailDto(String to, String title, String email) {
-		super();
-		this.to = to;
-		this.title = title;
-		this.email = email;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public String getTo() {
-		return to;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setTo(String to) {
-		this.to = to;
-	}
+    public String getText() {
+        return text;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public void setText(String text) {
+        this.text = text;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public EmailDto(String email, String title, String text) {
+        super();
+        this.email = email;
+        this.title = title;
+        this.text = text;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
+    public void setName(String name) {
+        this.name = name;
+    }
 }
