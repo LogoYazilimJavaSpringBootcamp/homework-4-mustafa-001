@@ -2,9 +2,11 @@ package com.logo.repository.customerdao;
 
 import com.logo.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,32 +17,41 @@ public class JDBCTemplateCustomerDao implements CustomerDao {
 
     @Override
     public Optional<Customer> findByName(String name) {
-        return Optional.empty();
+        Customer result = jdbcTemplate.queryForObject("SELECT * FROM customer WHERE name = ?", new BeanPropertyRowMapper<>(Customer.class), name);
+        if (result == null) {
+            return Optional.empty();
+        }
+        return Optional.of(result);
     }
 
     @Override
     public List<Customer> getByIsActive(boolean isActive) {
-        return null;
+        return jdbcTemplate.query("SELECT * FROM customer WHERE is_active = ?", new BeanPropertyRowMapper<>(Customer.class), isActive);
     }
 
     @Override
     public Customer save(Customer entity) {
-         jdbcTemplate.update("INSERT INTO customer(id, name, age, is_active) VALUES (?, ?, ?, ?)", 100, entity.getName(), entity.getAge(), entity.isActive());
-         return  entity;
+        jdbcTemplate.update("INSERT INTO customer( name, age, address_id, is_active) VALUES ( ?, ?, ?, ?)",
+                entity.getName(), entity.getAge(), entity.getAddress().getId(), entity.isActive());
+        return entity;
     }
 
     @Override
     public Optional<Customer> findById(Long id) {
-        return Optional.empty();
+        Customer result = jdbcTemplate.queryForObject("SELECT * FROM customer WHERE id = ?", new BeanPropertyRowMapper<>(Customer.class), id);
+        if (result == null) {
+            return Optional.empty();
+        }
+        return Optional.of(result);
     }
 
     @Override
     public List<Customer> findAll() {
-        return null;
+       return  jdbcTemplate.query("SELECT * FROM customer", new BeanPropertyRowMapper<>(Customer.class));
     }
 
     @Override
     public void delete(Customer entity) {
-
+        jdbcTemplate.update("DELETE FROM customer WHERE id = ?", entity.getId());
     }
 }

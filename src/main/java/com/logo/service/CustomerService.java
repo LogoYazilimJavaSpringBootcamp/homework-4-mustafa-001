@@ -8,6 +8,7 @@ import com.logo.repository.SalesInvoiceRepository;
 import com.logo.repository.customerdao.CustomerDao;
 import com.logo.repository.customerdao.HibernateCustomerDao;
 import com.logo.repository.customerdao.JDBCTemplateCustomerDao;
+import com.logo.repository.customerdao.JdbcCustomerDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +26,10 @@ public class CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
-
-    @Autowired
-    private HibernateCustomerDao hibernateCustomerDao;
     @Autowired
     private JDBCTemplateCustomerDao jdbcTemplateCustomerDao;
+    @Autowired
+    private HibernateCustomerDao hibernateCustomerDao;
 
     @Autowired
     private AddressRepository addressRepository;
@@ -72,26 +72,26 @@ public class CustomerService {
 //		orderService.createOrder();
 
 //		return prepareCustomerList();
-        return customerRepository.findAll();
+        return getCurrentCustomerDao().findAll();
     }
 
     public Optional<Customer> getCustomerByName(String name) {
-        return customerRepository.findByName(name);
+        return getCurrentCustomerDao().findByName(name);
     }
 
     public List<Customer> getByIsActive(boolean activeStatus) {
-        return customerRepository.getByIsActive(activeStatus);
+        return getCurrentCustomerDao().getByIsActive(activeStatus);
     }
 
     public Optional<Customer> getCustomerById(long id) {
-        return customerRepository.findById(id);
+        return getCurrentCustomerDao().findById(id);
     }
 
     public Customer update(long id, Customer customer) {
         System.out.println("Updating customer: " + id + "  to " + customer.toString());
         addressRepository.update(customer.getAddress());
         customer.setInvoiceList(salesInvoiceRepository.findAllById(customer.getInvoiceList().stream().map(SalesInvoice::getId).toList()));
-        var oldCustomerOpt = customerRepository.findById(id);
+        var oldCustomerOpt = getCurrentCustomerDao().findById(id);
         if (oldCustomerOpt.isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -108,11 +108,11 @@ public class CustomerService {
 
     public void delete(long id) {
         System.out.println("Deleting customer: " + id);
-        var customerOpt = customerRepository.findById(id);
+        var customerOpt = getCurrentCustomerDao().findById(id);
         if (customerOpt.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        customerRepository.delete(customerOpt.get());
+        getCurrentCustomerDao().delete(customerOpt.get());
     }
 
 }
