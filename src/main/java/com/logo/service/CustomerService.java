@@ -39,16 +39,19 @@ public class CustomerService {
     private SalesInvoiceRepository salesInvoiceRepository;
 
     private CustomerDao getCurrentCustomerDao() {
-        if (false) {
+        int selection = 2;
+        CustomerDao result = hibernateCustomerDao;
+        if (selection == 0) {
             System.out.println("Using HibernateCustomerDao.");
-            return hibernateCustomerDao;
-        } else if (false) {
+            result = hibernateCustomerDao;
+        } else if (selection == 1) {
             System.out.println("Using JDBCTemplateCustomerDao.");
-            return jdbcTemplateCustomerDao;
-        } else {
+            result = jdbcTemplateCustomerDao;
+        } else if (selection == 2) {
             System.out.println("Using JdbcCustomerDao.");
-            return jdbcCustomerDao;
+            result = jdbcCustomerDao;
         }
+        return result;
     }
 
     public CustomerService(OrderService orderService) {

@@ -2,10 +2,12 @@ package com.logo.repository.customerdao;
 
 import com.logo.model.Customer;
 import com.logo.repository.AddressRepository;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,19 +29,51 @@ public class JdbcCustomerDao implements CustomerDao {
 
     @Override
     public Optional<Customer> findByName(String name) {
-        return Optional.empty();
+        PreparedStatement getStatement;
+        try {
+            getStatement = connection.prepareStatement("SELECT * FROM customer WHERE name = ? ");
+            getStatement.setString(1, name);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        Customer entity;
+        try {
+            ResultSet resultSet = getStatement.executeQuery();
+            if (resultSet.next()) {
+                entity = createFromResultSet(resultSet);
+            } else {
+                entity = null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        Optional<Customer> result;
+        if (entity != null) {
+            result = Optional.of(entity);
+        } else {
+            result = Optional.empty();
+        }
+        return result;
     }
 
     @Override
     public List<Customer> getByIsActive(boolean isActive) {
-        return null;
+        PreparedStatement getStatement;
+        try {
+            getStatement = connection.prepareStatement("SELECT * FROM customer WHERE is_active = ?");
+            getStatement.setBoolean(1, isActive);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return getCustomersFromStatement(getStatement);
+
     }
 
     @Override
     public Customer save(Customer entity) {
         long generatedKey;
         try {
-            Statement statement = connection.createStatement();
             var preparedConnection = connection.prepareStatement("INSERT INTO customer (name, age, is_active, address_id) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             preparedConnection.setString(1, entity.getName());
             preparedConnection.setInt(2, entity.getAge());
@@ -63,15 +97,11 @@ public class JdbcCustomerDao implements CustomerDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        Customer addedEntity = new Customer();
+        Customer addedEntity = null;
         try {
             ResultSet resultSet = getStatement.executeQuery();
             while (resultSet.next()) {
-                addedEntity.setName(resultSet.getString("name"));
-                addedEntity.setAge(resultSet.getInt("age"));
-                addedEntity.setActive(resultSet.getBoolean("is_active"));
-                addedEntity.setId(resultSet.getLong("id"));
-                addedEntity.setAddress(addressRepository.findById(resultSet.getLong("address_id")).orElseThrow());
+                addedEntity = createFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -79,18 +109,76 @@ public class JdbcCustomerDao implements CustomerDao {
         return addedEntity;
     }
 
+    @SneakyThrows
+    private Customer createFromResultSet(ResultSet resultSet) {
+        var entity = new Customer();
+        entity.setName(resultSet.getString("name"));
+        entity.setAge(resultSet.getInt("age"));
+        entity.setActive(resultSet.getBoolean("is_active"));
+        entity.setId(resultSet.getLong("id"));
+        entity.setAddress(addressRepository.findById(resultSet.getLong("address_id")).orElse(null));
+        return entity;
+    }
+
     @Override
     public Optional<Customer> findById(Long id) {
-        return Optional.empty();
+        PreparedStatement getStatement;
+        try {
+            getStatement = connection.prepareStatement("SELECT * FROM customer WHERE id = ? ");
+            getStatement.setLong(1, id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        Customer addedEntity = null;
+        try {
+            ResultSet resultSet = getStatement.executeQuery();
+            while (resultSet.next()) {
+                addedEntity = createFromResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<Customer> result;
+        if (addedEntity != null) {
+            result = Optional.of(addedEntity);
+        } else {
+            result = Optional.empty();
+        }
+        return result;
     }
 
     @Override
     public List<Customer> findAll() {
-        return null;
+        PreparedStatement getStatement;
+        try {
+            getStatement = connection.prepareStatement("SELECT * FROM customer");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return getCustomersFromStatement(getStatement);
+    }
+
+    private List<Customer> getCustomersFromStatement(PreparedStatement getStatement) {
+        List<Customer> entities = new ArrayList<>();
+        try {
+            ResultSet resultSet = getStatement.executeQuery();
+            while (resultSet.next()) {
+                entities.add(createFromResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return entities;
     }
 
     @Override
     public void delete(Customer entity) {
-
+        try {
+            var preparedConnection = connection.prepareStatement("DELETE FROM customer WHERE id = ? ");
+            preparedConnection.setLong(1, entity.getId());
+            preparedConnection.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
