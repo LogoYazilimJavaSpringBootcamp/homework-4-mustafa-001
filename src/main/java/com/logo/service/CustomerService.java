@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class CustomerService {
@@ -24,8 +25,6 @@ public class CustomerService {
     @Autowired
     private ProductService productService;
 
-    @Autowired
-    private CustomerRepository customerRepository;
     @Autowired
     private JdbcCustomerDao jdbcCustomerDao;
     @Autowired
@@ -38,8 +37,12 @@ public class CustomerService {
     @Autowired
     private SalesInvoiceRepository salesInvoiceRepository;
 
+    //This method returns a different implementation of CustomerDao on every request.
+    //This can be implemented to return specific one with method argument or can be configured to inject
+    //different implementation on runtime.
     private CustomerDao getCurrentCustomerDao() {
-        int selection = 2;
+        var rand = new Random();
+        int selection = rand.nextInt(3);
         CustomerDao result = hibernateCustomerDao;
         if (selection == 0) {
             System.out.println("Using HibernateCustomerDao.");
@@ -47,7 +50,7 @@ public class CustomerService {
         } else if (selection == 1) {
             System.out.println("Using JDBCTemplateCustomerDao.");
             result = jdbcTemplateCustomerDao;
-        } else if (selection == 2) {
+        } else {
             System.out.println("Using JdbcCustomerDao.");
             result = jdbcCustomerDao;
         }
@@ -95,6 +98,10 @@ public class CustomerService {
         return getCurrentCustomerDao().findById(id);
     }
 
+    //If any field of the Customer object that came from client is not default (eg. null) update it in the entity
+    //that came from repository.
+    //For invoiceList field refill the clients  invoiceList with Invoice items that came from SalesInvoiceRepository before making this comparison.
+    //For address field forward clients address field to AddressRepository and let it handle it to change necessary fields and return an Adress entity with same id.
     public Customer update(long id, Customer customer) {
         System.out.println("Updating customer: " + id + "  to " + customer.toString());
         addressRepository.update(customer.getAddress());

@@ -1,9 +1,9 @@
 package com.logo.service;
 
-import java.rmi.ConnectException;
 import java.util.List;
 import java.util.Optional;
 
+import com.logo.dto.EmailDto;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,8 @@ public class UserService {
 
     public User createUser(User request) {
         try {
-            rabbitTemplate.convertAndSend("isbasi.email", request.getEmail());
+            rabbitTemplate.convertAndSend("isbasi.email", new EmailDto(request.getEmail(), request.getName(), "isbasi uygulamasına hoşgeldiniz.",
+                    "Patika eğitimi bünyesinde geliştirilen işbaşı uygulamasına kaydeoldunuz."));
             rabbitMQService.sendEmail(request.getEmail());
         } catch (Exception c) {
             System.out.println("RabbitMQ connection refused. Continuing.");
