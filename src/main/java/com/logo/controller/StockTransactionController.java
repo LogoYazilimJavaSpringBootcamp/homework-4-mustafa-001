@@ -20,7 +20,7 @@ public class StockTransactionController {
     }
 
     @GetMapping("/{id}")
-    public StockTransaction getById(@PathVariable int id) {
+    public StockTransaction getById(@PathVariable long id) {
         return stockTransactionService.getStockTransactionById(id).orElse(null);
     }
 
@@ -36,7 +36,7 @@ public class StockTransactionController {
     }
 
     @PutMapping("/{id}")
-    public StockTransaction update(@RequestBody StockTransaction transaction, @PathVariable int id) {
+    public StockTransaction update(@RequestBody StockTransaction transaction, @PathVariable long id) {
         return stockTransactionService.update(id, transaction);
     }
 

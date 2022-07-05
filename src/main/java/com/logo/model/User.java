@@ -1,20 +1,26 @@
 package com.logo.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.logo.model.enums.FirmType;
-import lombok.Getter;
-import lombok.Setter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Setter
 @Getter
 @Entity
+@Builder
+@AllArgsConstructor
 //Postgres doesn't accept "user" as tables name, hence custom name is necessary.
 @Table(name = "isbasi_user")
+@NoArgsConstructor
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,15 +33,21 @@ public class User {
 	private FirmType firmType;
 	@OneToOne
 	private Address address;
-	@OneToMany(mappedBy = "id")
-	private List<Customer> customerList = new ArrayList<>(10);
-	@OneToMany(mappedBy = "id")
-	private Set<RealWorldService> serviceSet;
-	@OneToMany(mappedBy = "id")
-	private Set<Product> productSet;
-	@OneToMany(mappedBy = "id")
-	private Set<StockTransaction> stockTransactionSet;
-	@OneToMany(mappedBy = "id")
-	private Set<Invoice> invoiceSet;
+	@JsonManagedReference
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
+	@OneToMany(mappedBy = "user")
+	private List<Customer> customerList = new ArrayList<>();
+	@JsonManagedReference
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
+	@OneToMany(mappedBy = "user")
+	private Set<Product> productSet = new HashSet<>();
+	@JsonManagedReference
+	@OneToMany(mappedBy = "user")
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
+	private Set<StockTransaction> stockTransactionSet = new HashSet<>();
+	@JsonManagedReference
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
+	@OneToMany(mappedBy = "user")
+	private Set<Invoice> invoiceSet = new HashSet<>();
 
 }

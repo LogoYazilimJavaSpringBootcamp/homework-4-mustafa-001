@@ -1,5 +1,6 @@
 package com.logo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.logo.model.enums.InvoiceType;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -18,6 +19,8 @@ import java.util.*;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@Builder
+@AllArgsConstructor
 @Table
 @Entity
 public class Invoice {
@@ -27,6 +30,7 @@ public class Invoice {
     private InvoiceType invoiceType;
     @JoinColumn
     @ManyToOne
+    @JsonBackReference
     private User user;
     @ManyToOne
     @JoinColumn
@@ -40,9 +44,8 @@ public class Invoice {
     private LocalDate paymentDate;
     private String documentNumber;
     private Currency currency;
-    @OneToMany
-    @ToString.Exclude
-    private List<ProductOrServiceAmountPair> products = new ArrayList<>();
+    @ManyToMany
+    private List<ProductAmountPair> productOrServiceAmountPairs = new ArrayList<>();
     private BigDecimal discountRate;
 
     @Override

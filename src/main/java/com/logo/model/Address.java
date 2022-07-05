@@ -1,14 +1,17 @@
 package com.logo.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+@Builder
+@AllArgsConstructor
 public class Address {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

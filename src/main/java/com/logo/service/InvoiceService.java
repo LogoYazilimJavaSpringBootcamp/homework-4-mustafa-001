@@ -1,9 +1,9 @@
 package com.logo.service;
 
-import com.logo.model.ProductOrServiceAmountPair;
+import com.logo.model.ProductAmountPair;
 import com.logo.model.Invoice;
 import com.logo.model.enums.InvoiceType;
-import com.logo.repository.ProductOrServiceAmountPairRepository;
+import com.logo.repository.ProductAmountPairRepository;
 import com.logo.repository.ProductRepository;
 import com.logo.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +20,16 @@ public class InvoiceService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private ProductOrServiceAmountPairRepository productOrServiceAmountPairRepository;
+    private ProductAmountPairRepository productOrServiceAmountPairRepository;
 
     public Invoice create(Invoice request) {
-        List<ProductOrServiceAmountPair> list = new ArrayList<>();
-        for (ProductOrServiceAmountPair it : request.getProducts()) {
-            ProductOrServiceAmountPair pair = new ProductOrServiceAmountPair(productRepository.findById(it.getProduct().getId()).get(), it.getAmount());
+        List<ProductAmountPair> list = new ArrayList<>();
+        for (ProductAmountPair it : request.getProductOrServiceAmountPairs()) {
+            ProductAmountPair pair = new ProductAmountPair(productRepository.findById(it.getProductOrService().getId()).get(), it.getAmount());
             productOrServiceAmountPairRepository.save(pair);
             list.add(pair);
         }
-        request.setProducts(list);
+        request.setProductOrServiceAmountPairs(list);
         return invoiceRepository.save(request);
     }
 
@@ -53,15 +53,15 @@ public class InvoiceService {
         }
         var oldInvoice = oldInvoiceOpt.get();
 
-        if (!invoice.getProducts().isEmpty()) {
-            List<ProductOrServiceAmountPair> list = new ArrayList<>();
-            for (ProductOrServiceAmountPair it : invoice.getProducts()) {
-                ProductOrServiceAmountPair pair = new ProductOrServiceAmountPair(productRepository.findById(it.getProduct().getId()).get(), it.getAmount());
+        if (!invoice.getProductOrServiceAmountPairs().isEmpty()) {
+            List<ProductAmountPair> list = new ArrayList<>();
+            for (ProductAmountPair it : invoice.getProductOrServiceAmountPairs()) {
+                ProductAmountPair pair = new ProductAmountPair(productRepository.findById(it.getProductOrService().getId()).get(), it.getAmount());
                 productOrServiceAmountPairRepository.save(pair);
                 list.add(pair);
             }
-            productOrServiceAmountPairRepository.deleteAll(oldInvoice.getProducts());
-            oldInvoice.setProducts(list);
+            productOrServiceAmountPairRepository.deleteAll(oldInvoice.getProductOrServiceAmountPairs());
+            oldInvoice.setProductOrServiceAmountPairs(list);
         }
         if (invoice.getDocumentNumber() != null) oldInvoice.setDocumentNumber(invoice.getDocumentNumber());
         if (invoice.getInvoiceDate() != null) oldInvoice.setInvoiceDate(invoice.getInvoiceDate());

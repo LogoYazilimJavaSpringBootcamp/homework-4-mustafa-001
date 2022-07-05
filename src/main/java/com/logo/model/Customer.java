@@ -1,5 +1,12 @@
 package com.logo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +14,8 @@ import java.util.List;
 //Models a Customer/Supplier in isbasi app.
 //İşbaşı uygulamasındaki Müşteri/Tedarikçi kısımlarını modeller.
 @Entity
+@AllArgsConstructor
+@Builder
  public  class Customer {
 
     @Id
@@ -16,11 +25,13 @@ import java.util.List;
     private int age;
     @OneToOne
     private Address address;
+    @JsonBackReference
     @JoinColumn
     @ManyToOne
     private User user;
     private boolean isActive;
     @OneToMany(mappedBy = "id")
+    @Schema(defaultValue = "[\"id\" : 10")
     private List<Invoice> invoiceList = new ArrayList<>();
 
     public Address getAddress() {

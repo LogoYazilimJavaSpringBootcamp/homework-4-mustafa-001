@@ -6,181 +6,6 @@
 	},
 	"item": [
 		{
-			"name": "Services",
-			"item": [
-				{
-					"name": "saveService",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": 0,\n    \"code\": \"ABC10QWE\",\n    \"name\": \"kartal kuru temizleme\",\n    \"unitType\": \"Adet\",\n    \"vatRate\": 18,\n    \"currency\": \"TRY\",\n    \"salesPrice\": 100,\n    \"purchasePrice\": 80,\n    \"withholdingRatePercent\": 100,\n    \"active\": true,\n    \"cessrate\": 20\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/services",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"services"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "deleteSercie",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"kartal bakkal\",\n    \"age\":\"24\",\n    \"orders\": []\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/services/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"services",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "searchServiceByName",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/services/name?name=kartal",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"services",
-								"name"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "kartal"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "getAllServices",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": 0,\n    \"code\": null,\n    \"name\": \"kartal bakkal\",\n    \"unitType\": null,\n    \"vatRate\": null,\n    \"currency\": null,\n    \"salesPrice\": null,\n    \"purchasePrice\": null,\n    \"withholdingRatePercent\": null,\n    \"active\": false,\n    \"cessrate\": null\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/services",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"services"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "getServiceByCode",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": 0,\n    \"code\": null,\n    \"name\": \"kartal bakkal\",\n    \"unitType\": null,\n    \"vatRate\": null,\n    \"currency\": null,\n    \"salesPrice\": null,\n    \"purchasePrice\": null,\n    \"withholdingRatePercent\": null,\n    \"active\": false,\n    \"cessrate\": null\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/services/code/someservicecode",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"services",
-								"code",
-								"someservicecode"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "updateService",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": 0,\n    \"code\": null,\n    \"name\": \"kartal bakkal\",\n    \"unitType\": null,\n    \"vatRate\": null,\n    \"currency\": null,\n    \"salesPrice\": null,\n    \"purchasePrice\": null,\n    \"withholdingRatePercent\": null,\n    \"active\": false,\n    \"cessrate\": null\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/customers/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"customers",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Products",
 			"item": [
 				{
@@ -371,7 +196,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"mustafa\",\n    \"surname\":\"mutlu\",\n    \"email\":\"mustafa@email.com\",\n    \"password\":\"password\"\n}",
+							"raw": "{\n    \"id\": 83,\n    \"name\": \"mustafa\",\n    \"surname\": \"mutlu\",\n    \"email\": \"mustafa@email.com\",\n    \"password\": \"password\",\n    \"firmType\": null,\n    \"address\": null,\n    \"customerList\": [],\n    \"serviceSet\": \n    \"productSet\": null,\n    \"stockTransactionSet\": null,\n    \"invoiceSet\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -460,7 +285,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 0,\n    \"name\": \"JDBC ile eklenen 2. customer\",\n    \"age\": 21,\n    \"address\": {\n        \"id\": 0,\n        \"country\": \"TR\",\n        \"province\": \"Aydın\",\n        \"address\": null\n    },\n    \"invoiceList\": [{\"id\": 23}],\n    \"active\": true\n}",
+							"raw": "{\n    \"id\": 0,\n    \"name\": \"JDBC ile eklenen 3. customer\",\n    \"age\": 21,\n    \"user\": {\"id\": 303},\n    \"address\": {\n        \"id\": 0,\n        \"country\": \"TR\",\n        \"province\": \"Aydın\",\n        \"address\": null\n    },\n    \"invoiceList\": [],\n    \"active\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -530,7 +355,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 11,\n    \"name\": \"Vatan Bilgisayar\",\n    \"age\": 14,\n    \"address\": {\n        \"id\": 0,\n        \"country\": \"FR\",\n        \"province\": null,\n        \"address\": null\n    },\n    \"invoiceList\": [],\n    \"active\": true\n}\n",
+							"raw": " {\n        \"id\": 111,\n        \"name\": \"JDBC ile eklenen 2. Customer\",\n        \"age\": 11,\n        \"user\": null,\n        \"address\": {\n            \"id\": 70,\n            \"country\": \"UK\",\n            \"province\": \"London\",\n            \"address\": null\n        },\n        \"invoiceList\": [],\n        \"active\": false\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -792,7 +617,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 0,\n    \"customer\": {\"id\": 11},\n    \"address\": null,\n    \"shipmentAdress\": null,\n    \"invoiceDate\": null,\n    \"deliveryDate\": null,\n    \"paymentDate\": null,\n    \"documentNumber\": \"AAA1212CCC\",\n    \"currency\": null,\n    \"products\": [{\"product\":{\"id\": 2},\"amount\": 1}],\n    \"discountRate\": null\n}",
+							"raw": "{\n    \"id\": 0,\n    \"customer\": {\"id\": 2},\n    \"address\": null,\n    \"shipmentAdress\": null,\n    \"invoiceDate\": null,\n    \"deliveryDate\": null,\n    \"invoiceType\": \"SALES_INVOICE\",\n    \"paymentDate\": null,\n    \"documentNumber\": \"AAA1212CCC\",\n    \"currency\": null,\n    \"products\": [{\"product\":{\"id\": 79},\"amount\": 1}],\n    \"discountRate\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -944,6 +769,38 @@
 							"path": [
 								"invoices",
 								"23"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getInvoiceByType",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 0,\n    \"code\": null,\n    \"name\": \"kartal bakkal\",\n    \"unitType\": null,\n    \"vatRate\": null,\n    \"currency\": null,\n    \"salesPrice\": null,\n    \"purchasePrice\": null,\n    \"withholdingRatePercent\": null,\n    \"active\": false,\n    \"cessrate\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/invoices/type/SALES_INVOICE",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"invoices",
+								"type",
+								"SALES_INVOICE"
 							]
 						}
 					},

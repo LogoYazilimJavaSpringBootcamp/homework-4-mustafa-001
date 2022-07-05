@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.logo.dto.EmailDto;
+import com.logo.model.Address;
+import com.logo.repository.AddressRepository;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Autowired
     private RabbitMQService rabbitMQService;
@@ -33,6 +38,7 @@ public class UserService {
             System.out.println("RabbitMQ connection refused. Continuing.");
         }
 
+        request.setAddress(addressRepository.save(request.getAddress()));
         return userRepository.save(request);
     }
 

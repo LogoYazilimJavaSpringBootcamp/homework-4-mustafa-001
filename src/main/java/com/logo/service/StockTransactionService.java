@@ -1,8 +1,9 @@
 package com.logo.service;
 
-import com.logo.model.ProductOrServiceAmountPair;
+import com.logo.model.Product;
+import com.logo.model.ProductAmountPair;
 import com.logo.model.StockTransaction;
-import com.logo.repository.ProductOrServiceAmountPairRepository;
+import com.logo.repository.ProductAmountPairRepository;
 import com.logo.repository.ProductRepository;
 import com.logo.repository.StockTransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,12 @@ public class StockTransactionService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private ProductOrServiceAmountPairRepository productOrServiceAmountPairRepository;
+    private ProductAmountPairRepository productOrServiceAmountPairRepository;
 
     public StockTransaction create(StockTransaction request) {
-        List<ProductOrServiceAmountPair> list = new ArrayList<>();
-        for (ProductOrServiceAmountPair it : request.getProducts()) {
-            ProductOrServiceAmountPair pair = new ProductOrServiceAmountPair(productRepository.findById(it.getProduct().getId()).get(), it.getAmount());
+        List<ProductAmountPair> list = new ArrayList<>();
+        for (ProductAmountPair it : request.getProducts()) {
+            ProductAmountPair pair = new ProductAmountPair(productRepository.findById(((Product)it.getProductOrService()).getId()).get(), it.getAmount());
             productOrServiceAmountPairRepository.save(pair);
             list.add(pair);
         }
@@ -41,11 +42,11 @@ public class StockTransactionService {
         return stockTransactionRepository.findByDocumentNumber(documentNumber);
     }
 
-    public Optional<StockTransaction> getStockTransactionById(int id) {
+    public Optional<StockTransaction> getStockTransactionById(long id) {
         return stockTransactionRepository.findById(id);
     }
 
-    public StockTransaction update(int id, StockTransaction transaction) {
+    public StockTransaction update(long id, StockTransaction transaction) {
         System.out.println("Updating transaction: " + id + "  to " + transaction.toString());
         var oldTransactionOpt = stockTransactionRepository.findById(id);
         if (oldTransactionOpt.isEmpty()) {
@@ -53,9 +54,9 @@ public class StockTransactionService {
         }
         var oldTransaction = oldTransactionOpt.get();
         if (!transaction.getProducts().isEmpty()) {
-            List<ProductOrServiceAmountPair> list = new ArrayList<>();
-            for (ProductOrServiceAmountPair it : transaction.getProducts()) {
-                ProductOrServiceAmountPair pair = new ProductOrServiceAmountPair(productRepository.findById(it.getProduct().getId()).get(), it.getAmount());
+            List<ProductAmountPair> list = new ArrayList<>();
+            for (ProductAmountPair it : transaction.getProducts()) {
+                ProductAmountPair pair = new ProductAmountPair(productRepository.findById(it.getProductOrService().getId()).get(), it.getAmount());
                 productOrServiceAmountPairRepository.save(pair);
                 list.add(pair);
             }

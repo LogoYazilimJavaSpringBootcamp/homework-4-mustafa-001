@@ -1,6 +1,10 @@
 package com.logo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.logo.model.enums.StockTransactionType;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,12 +14,16 @@ import java.util.List;
 //Models a warehouse transaction in isbasi app.
 //İşbaşı uygulamasınının Stok ve Hizmet kısmındaki Stok Hareketleri kısmını modeller.
 @Entity
+@Builder
+@AllArgsConstructor
 public class StockTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
     @JoinColumn
     @ManyToOne
+    @JsonBackReference
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private User user;
     private String documentNumber;
     @Enumerated(EnumType.STRING)
@@ -23,13 +31,17 @@ public class StockTransaction {
     private LocalDate date;
     private String description;
     @OneToMany
-    private List<ProductOrServiceAmountPair> products = new ArrayList<>();
+    private List<ProductAmountPair> products = new ArrayList<>();
 
-    public List<ProductOrServiceAmountPair> getProducts() {
+    public StockTransaction() {
+
+    }
+
+    public List<ProductAmountPair> getProducts() {
         return products;
     }
 
-    public void setProducts(List<ProductOrServiceAmountPair> products) {
+    public void setProducts(List<ProductAmountPair> products) {
         this.products = products;
     }
 
