@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Currency;
 
@@ -22,6 +19,10 @@ abstract class ProductOrService {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
     protected String name;
+    @JoinColumn
+    @ManyToOne
+    private User user;
+
      UnitType unitType;
     //KDV(Katma Değer Vergisi)/VAT(Value Added Tax)
     protected BigDecimal vatRate;

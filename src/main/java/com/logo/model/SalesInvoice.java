@@ -23,7 +23,11 @@ public class SalesInvoice {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @JoinColumn
     @ManyToOne
+    private User user;
+    @ManyToOne
+    @JoinColumn
     private Customer customer;
     @OneToOne
     private Address address;

@@ -17,9 +17,11 @@ import java.util.Optional;
     private int age;
     @OneToOne
     private Address address;
+    @JoinColumn
+    @ManyToOne
+    private User user;
     private boolean isActive;
-
-    @OneToMany
+    @OneToMany(mappedBy = "id")
     private List<SalesInvoice> invoiceList = new ArrayList<>();
 
     public Address getAddress() {
@@ -73,5 +75,13 @@ import java.util.Optional;
 
     public List<SalesInvoice> getInvoiceList() {
         return invoiceList;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

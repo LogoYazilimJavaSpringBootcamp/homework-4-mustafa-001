@@ -14,6 +14,9 @@ public class StockTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @JoinColumn
+    @ManyToOne
+    private User user;
     private String documentNumber;
     @Enumerated(EnumType.STRING)
     private StockTransactionType type;

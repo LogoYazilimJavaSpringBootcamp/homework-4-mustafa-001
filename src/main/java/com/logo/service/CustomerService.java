@@ -37,12 +37,13 @@ public class CustomerService {
     @Autowired
     private SalesInvoiceRepository salesInvoiceRepository;
 
+
     //This method returns a different implementation of CustomerDao on every request.
     //This can be implemented to return specific one with method argument or can be configured to inject
     //different implementation on runtime.
     private CustomerDao getCurrentCustomerDao() {
         var rand = new Random();
-        int selection = 1; //rand.nextInt(3);
+        int selection = 0; //rand.nextInt(3);
         CustomerDao result = hibernateCustomerDao;
         if (selection == 0) {
             System.out.println("Using HibernateCustomerDao.");
@@ -68,6 +69,8 @@ public class CustomerService {
     public Customer create(Customer request) {
         System.out.println("Adding customer:" + request.toString());
         var address = addressRepository.save(request.getAddress());
+        //It is intentional we don't do anything about user field of Customer here. When creating client sends us an id
+        //and we save it, we don't need to fetch User details and send them to client here.
         request.setAddress(address);
         request.setInvoiceList(salesInvoiceRepository.findAllById(request.getInvoiceList().stream().map(SalesInvoice::getId).toList()));
         return getCurrentCustomerDao().save(request);

@@ -1,6 +1,7 @@
 package com.logo.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 //Postgres doesn't accept "user" as tables name, hence custom name is necessary.
-@Table(name = "IsbasıUser")
+@Table(name = "isbasi_user")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,13 +29,15 @@ public class User {
 	private FirmType firmType;
 	@OneToOne
 	private Address address;
-	@OneToMany
+	@OneToMany(mappedBy = "id")
 	private List<Customer> customerList = new ArrayList<>(10);
-	@OneToMany
+	@OneToMany(mappedBy = "id")
 	private Set<RealWorldService> serviceSet;
-	@OneToMany
+	@OneToMany(mappedBy = "id")
 	private Set<Product> productSet;
-	@OneToMany Set<StockTransaction> stockTransactionSet;
-	@OneToMany Set<SalesInvoice> salesInvoiceSet;
+	@OneToMany(mappedBy = "id")
+	private Set<StockTransaction> stockTransactionSet;
+	@OneToMany(mappedBy = "id")
+	private Set<SalesInvoice> salesInvoiceSet;
 
 }
