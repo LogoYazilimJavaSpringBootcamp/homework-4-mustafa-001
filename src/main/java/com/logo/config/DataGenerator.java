@@ -49,7 +49,7 @@ public class DataGenerator {
 
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
-        if (invoiceRepository.findAll().size() > 0){
+        if (!invoiceRepository.findAll().isEmpty() && !userRepository.findAll().isEmpty()){
             return;
         }
         System.out.println("Database is empty, inserting placeholder items.");

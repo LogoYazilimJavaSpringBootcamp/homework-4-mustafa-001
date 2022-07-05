@@ -15,7 +15,7 @@ public class StockTransactionController {
     private StockTransactionService stockTransactionService;
 
     @GetMapping
-    public List<StockTransaction> getAllServices() {
+    public List<StockTransaction> getAllTransactions() {
         return stockTransactionService.getAllTransactions();
     }
 

@@ -20,16 +20,17 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	@GetMapping
+	public List<User> getAllUsers() {
+		return userService.getAllUsers();
+	}
 
 	@PostMapping
 	public User createUser(@RequestBody User userRequest) {
 		return userService.createUser(userRequest);
 	}
 
-	@GetMapping
-	public List<User> getAllUsers() {
-		return userService.getAllUsers();
-	}
+
 
 	@GetMapping(value = "/{email}")
 	public User getUserByEmail(@PathVariable String email) {

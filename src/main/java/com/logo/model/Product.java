@@ -32,14 +32,14 @@ public class Product {
 
      UnitType unitType;
     //KDV(Katma Değer Vergisi)/VAT(Value Added Tax)
-    protected BigDecimal vatRate;
-    protected Currency currency;
+    private BigDecimal vatRate;
+    private Currency currency;
     //without VAT
-    protected BigDecimal salesPrice;
+    private BigDecimal salesPrice;
     //without VAT
-    protected BigDecimal purchasePrice;
+    private BigDecimal purchasePrice;
     //tevkifat
-    protected BigDecimal withholdingRatePercent;
+    private BigDecimal withholdingRatePercent;
 
     public boolean isActive() {
         return isActive;

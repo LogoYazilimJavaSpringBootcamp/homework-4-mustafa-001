@@ -6,7 +6,7 @@ localhost:8080 API dokümantasyonuna yönlendirir. localhost:5432'de postgreSQL,
 15672'de RabbitMQ çalışmasını gerektirir.
 İlk çalıştırışta veritabanına bir kaç veri yazar, GET metodlarıyla bunlar alınabilir, POST ile aynı şablon kullanılıp id
 alanı 0 bırakılmak suretiyle yeni veri eklenebilir.
-UPDATE yaparken pathvariable olarak güncellenmek istenen verinin id'si body'de de yeni veri eklenebilir. null bırakılan
+UPDATE yaparken path variable olarak güncellenmek istenen verinin id'si body'de de yeni veri eklenebilir. null bırakılan
 alanlar değiştirilmez. İlişkilir olan alanları değiştirmek için diğer objede sadece id'nin verilmesi yeterlidir.
 Örneğin:
 ```
@@ -16,7 +16,7 @@ PUT localhost:8080/transaction/336
 {
 "id": 0,
 "documentNumber":null,
-"type": "FIRECIKIS",
+"type": "SARFCIKIS",
 "date": "2022-07-05",
 "description": "string",
 "products": [

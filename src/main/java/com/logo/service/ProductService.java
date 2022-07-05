@@ -29,27 +29,27 @@ public class ProductService {
         return productRepository.getProductsStartingWith(searchQuery);
     }
 
-    public Product update(int id, Product service) {
-        System.out.println("Updating service: " + id + "  to " + service.toString());
+    public Product update(int id, Product newProduct) {
+        System.out.println("Updating product: " + id + "  to " + newProduct.toString());
         var oldServiceOpt = productRepository.findById(id);
         if (oldServiceOpt.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        var oldService = oldServiceOpt.get();
-        if (!service.getName().equals("")) {
-            oldService.setName(service.getName());
+        var oldProduct = oldServiceOpt.get();
+        if (!newProduct.getName().equals("")) {
+            oldProduct.setName(newProduct.getName());
         }
-        if (!service.isActive() == oldService.isActive()) oldService.setActive(service.isActive());
-        if (!service.getBarcode().equals(oldService.getBarcode())) oldService.setBarcode(service.getBarcode());
-        if (!service.getCESSRate().equals(oldService.getCESSRate())) oldService.setCESSRate(service.getCESSRate());
-        if (!service.getCurrency().equals(oldService.getCurrency())) oldService.setCurrency(service.getCurrency());
-        if (!service.getPurchasePrice().equals(oldService.getPurchasePrice()))
-            oldService.setPurchasePrice(service.getPurchasePrice());
-        if (!service.getSalesPrice().equals(oldService.getSalesPrice()))
-            oldService.setSalesPrice(service.getSalesPrice());
-        if (!service.getUnitType().equals(oldService.getUnitType())) oldService.setUnitType(service.getUnitType());
-        if (!service.getVatRate().equals(oldService.getVatRate())) oldService.setVatRate(service.getVatRate());
-        return oldService;
+        if (!newProduct.isActive() == oldProduct.isActive()) oldProduct.setActive(newProduct.isActive());
+        if (newProduct.getBarcode() != null) oldProduct.setBarcode(newProduct.getBarcode());
+        if (newProduct.getCESSRate() != null) oldProduct.setCESSRate(newProduct.getCESSRate());
+        if (newProduct.getCurrency() != null) oldProduct.setCurrency(newProduct.getCurrency());
+        if (newProduct.getPurchasePrice() != null)
+            oldProduct.setPurchasePrice(newProduct.getPurchasePrice());
+        if (newProduct.getSalesPrice() != null)
+            oldProduct.setSalesPrice(newProduct.getSalesPrice());
+        if (newProduct.getUnitType() != null) oldProduct.setUnitType(newProduct.getUnitType());
+        if (newProduct.getVatRate() != null) oldProduct.setVatRate(newProduct.getVatRate());
+        return oldProduct;
     }
 
     public void delete(int id) {

@@ -18,8 +18,6 @@ import java.util.Random;
 @Service
 public class CustomerService {
 
-    @Autowired
-    private OrderService orderService;
 
     @Autowired
     private ProductService productService;
@@ -57,13 +55,6 @@ public class CustomerService {
         return result;
     }
 
-    public CustomerService(OrderService orderService) {
-        this.orderService = orderService;
-    }
-
-    public void setOrderService(OrderService orderService) {
-        this.orderService = orderService;
-    }
 
     public Customer create(Customer request) {
         System.out.println("Adding customer:" + request.toString());
@@ -80,7 +71,6 @@ public class CustomerService {
         // ProductService productService = new ProductService;
         // singleton olduğunun kanıtı
         System.out.println("CustomerService - productService:" + productService.toString());
-        System.out.println("CustomerService - orderService:" + orderService.toString());
 
 //		orderService.createOrder();
 
