@@ -1,14 +1,12 @@
 package com.logo.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import com.logo.model.enums.FirmType;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Generated;
 
 import javax.persistence.*;
 
@@ -38,6 +36,6 @@ public class User {
 	@OneToMany(mappedBy = "id")
 	private Set<StockTransaction> stockTransactionSet;
 	@OneToMany(mappedBy = "id")
-	private Set<SalesInvoice> salesInvoiceSet;
+	private Set<Invoice> invoiceSet;
 
 }

@@ -1,5 +1,6 @@
 package com.logo.model;
 
+import com.logo.model.enums.InvoiceType;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -19,10 +20,11 @@ import java.util.*;
 @RequiredArgsConstructor
 @Table
 @Entity
-public class SalesInvoice {
+public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    private InvoiceType invoiceType;
     @JoinColumn
     @ManyToOne
     private User user;
@@ -47,7 +49,7 @@ public class SalesInvoice {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        SalesInvoice that = (SalesInvoice) o;
+        Invoice that = (Invoice) o;
         return id == that.id;
     }
 

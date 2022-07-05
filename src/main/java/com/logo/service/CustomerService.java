@@ -1,10 +1,9 @@
 package com.logo.service;
 
 import com.logo.model.Customer;
-import com.logo.model.SalesInvoice;
+import com.logo.model.Invoice;
 import com.logo.repository.AddressRepository;
-import com.logo.repository.CustomerRepository;
-import com.logo.repository.SalesInvoiceRepository;
+import com.logo.repository.InvoiceRepository;
 import com.logo.repository.customerdao.CustomerDao;
 import com.logo.repository.customerdao.HibernateCustomerDao;
 import com.logo.repository.customerdao.JDBCTemplateCustomerDao;
@@ -35,7 +34,7 @@ public class CustomerService {
     @Autowired
     private AddressRepository addressRepository;
     @Autowired
-    private SalesInvoiceRepository salesInvoiceRepository;
+    private InvoiceRepository invoiceRepository;
 
 
     //This method returns a different implementation of CustomerDao on every request.
@@ -72,7 +71,7 @@ public class CustomerService {
         //It is intentional we don't do anything about user field of Customer here. When creating client sends us an id
         //and we save it, we don't need to fetch User details and send them to client here.
         request.setAddress(address);
-        request.setInvoiceList(salesInvoiceRepository.findAllById(request.getInvoiceList().stream().map(SalesInvoice::getId).toList()));
+        request.setInvoiceList(invoiceRepository.findAllById(request.getInvoiceList().stream().map(Invoice::getId).toList()));
         return getCurrentCustomerDao().save(request);
     }
 
@@ -107,13 +106,13 @@ public class CustomerService {
     //For address field forward clients address field to AddressRepository and let it handle it to change necessary fields and return an Adress entity with same id.
     public Customer update(long id, Customer customer) {
         System.out.println("Updating customer: " + id + "  to " + customer.toString());
-        customer.setInvoiceList(salesInvoiceRepository.findAllById(customer.getInvoiceList().stream().map(SalesInvoice::getId).toList()));
+        customer.setInvoiceList(invoiceRepository.findAllById(customer.getInvoiceList().stream().map(Invoice::getId).toList()));
         var oldCustomerOpt = getCurrentCustomerDao().findById(id);
         if (oldCustomerOpt.isEmpty()) {
             throw new IllegalArgumentException();
         }
 
-        customer.setInvoiceList(salesInvoiceRepository.findAllById(customer.getInvoiceList().stream().map(SalesInvoice::getId).toList()));
+        customer.setInvoiceList(invoiceRepository.findAllById(customer.getInvoiceList().stream().map(Invoice::getId).toList()));
 
         var oldCustomer = oldCustomerOpt.get();
         if (customer.getAddress() != null) oldCustomer.setAddress(addressRepository.update(customer.getAddress()));

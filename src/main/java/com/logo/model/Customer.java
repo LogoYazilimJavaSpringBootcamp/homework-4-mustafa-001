@@ -3,7 +3,6 @@ package com.logo.model;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 //Models a Customer/Supplier in isbasi app.
 //İşbaşı uygulamasındaki Müşteri/Tedarikçi kısımlarını modeller.
@@ -22,7 +21,7 @@ import java.util.Optional;
     private User user;
     private boolean isActive;
     @OneToMany(mappedBy = "id")
-    private List<SalesInvoice> invoiceList = new ArrayList<>();
+    private List<Invoice> invoiceList = new ArrayList<>();
 
     public Address getAddress() {
         return address;
@@ -53,7 +52,7 @@ import java.util.Optional;
     }
 
 
-    public void setInvoiceList(List<SalesInvoice> invoiceList) {
+    public void setInvoiceList(List<Invoice> invoiceList) {
         this.invoiceList = invoiceList;
     }
 
@@ -73,7 +72,7 @@ import java.util.Optional;
         isActive = active;
     }
 
-    public List<SalesInvoice> getInvoiceList() {
+    public List<Invoice> getInvoiceList() {
         return invoiceList;
     }
 
