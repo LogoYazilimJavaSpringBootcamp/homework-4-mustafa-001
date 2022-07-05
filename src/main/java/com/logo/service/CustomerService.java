@@ -42,7 +42,7 @@ public class CustomerService {
     //different implementation on runtime.
     private CustomerDao getCurrentCustomerDao() {
         var rand = new Random();
-        int selection = rand.nextInt(3);
+        int selection = 1; //rand.nextInt(3);
         CustomerDao result = hibernateCustomerDao;
         if (selection == 0) {
             System.out.println("Using HibernateCustomerDao.");
@@ -104,7 +104,6 @@ public class CustomerService {
     //For address field forward clients address field to AddressRepository and let it handle it to change necessary fields and return an Adress entity with same id.
     public Customer update(long id, Customer customer) {
         System.out.println("Updating customer: " + id + "  to " + customer.toString());
-        addressRepository.update(customer.getAddress());
         customer.setInvoiceList(salesInvoiceRepository.findAllById(customer.getInvoiceList().stream().map(SalesInvoice::getId).toList()));
         var oldCustomerOpt = getCurrentCustomerDao().findById(id);
         if (oldCustomerOpt.isEmpty()) {
@@ -114,6 +113,7 @@ public class CustomerService {
         customer.setInvoiceList(salesInvoiceRepository.findAllById(customer.getInvoiceList().stream().map(SalesInvoice::getId).toList()));
 
         var oldCustomer = oldCustomerOpt.get();
+        if (customer.getAddress() != null) oldCustomer.setAddress(addressRepository.update(customer.getAddress()));
         if (customer.getName() != null) oldCustomer.setName(customer.getName());
         if (customer.getAge() != 0) oldCustomer.setAge(customer.getAge());
         if (customer.isActive() != oldCustomer.isActive()) oldCustomer.setActive(customer.isActive());

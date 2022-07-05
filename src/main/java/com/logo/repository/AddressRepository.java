@@ -21,7 +21,7 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
             existingAddress.setProvince(address.getProvince());
         if (address.getAddress() != null)
             existingAddress.setAddress(address.getAddress());
-        return this.save(existingAddress);
+        return existingAddress;
     }
 }
 

@@ -37,6 +37,13 @@ public class JDBCTemplateCustomerDao implements CustomerDao {
     }
 
     @Override
+    public Customer update(Customer entity) {
+        jdbcTemplate.update("UPDATE  customer SET name = ?, age = ? , address_id = ?, is_active = ? WHERE id = ?",
+                entity.getName(), entity.getAge(), entity.getAddress().getId(), entity.isActive(), entity.getId());
+        return entity;
+    }
+
+    @Override
     public Optional<Customer> findById(Long id) {
         Customer result = jdbcTemplate.queryForObject("SELECT * FROM customer WHERE id = ?", new BeanPropertyRowMapper<>(Customer.class), id);
         if (result == null) {

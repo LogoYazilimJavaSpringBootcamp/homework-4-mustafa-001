@@ -13,6 +13,8 @@ public interface CustomerDao {
 
     Customer save(Customer entity);
 
+    Customer update(Customer entity);
+
 //    Iterable<Customer> saveAll(Iterable<S> entities);
 
     Optional<Customer> findById(Long id);

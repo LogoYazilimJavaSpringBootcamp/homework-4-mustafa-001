@@ -100,13 +100,50 @@ public class JdbcCustomerDao implements CustomerDao {
         Customer addedEntity = null;
         try {
             ResultSet resultSet = getStatement.executeQuery();
-            while (resultSet.next()) {
-                addedEntity = createFromResultSet(resultSet);
-            }
+            resultSet.next();
+            addedEntity = createFromResultSet(resultSet);
+            addedEntity.setAddress(entity.getAddress());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return addedEntity;
+    }
+
+    @Override
+    public Customer update(Customer entity) {
+        try {
+            var preparedConnection = connection.prepareStatement("UPDATE customer SET name = ?, age = ?, is_active = ?, address_id = ? WHERE id = ?");
+            preparedConnection.setString(1, entity.getName());
+            preparedConnection.setInt(2, entity.getAge());
+            preparedConnection.setBoolean(3, entity.isActive());
+            preparedConnection.setLong(4, entity.getAddress().getId());
+            preparedConnection.setLong(5, entity.getId());
+            preparedConnection.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        PreparedStatement getStatement;
+        try {
+            getStatement = connection.prepareStatement("SELECT * FROM customer WHERE id = ?");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            getStatement.setLong(1, entity.getId());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        Customer updatedEntity = null;
+        try {
+            ResultSet resultSet = getStatement.executeQuery();
+            resultSet.next();
+            updatedEntity = createFromResultSet(resultSet);
+            updatedEntity.setAddress(entity.getAddress());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return updatedEntity;
     }
 
     @SneakyThrows

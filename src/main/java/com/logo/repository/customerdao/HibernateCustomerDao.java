@@ -30,6 +30,12 @@ public class HibernateCustomerDao implements CustomerDao{
         return customerRepository.save(entity);
     }
 
+    //Hibernate already tracks changes and flueshes them at the end. So nothing is necessary.
+    @Override
+    public Customer update(Customer entity) {
+        return entity;
+    }
+
     @Override
     public Optional<Customer> findById(Long id) {
         return  customerRepository.findById(id);
